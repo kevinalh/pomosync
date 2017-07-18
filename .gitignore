@@ -40,3 +40,27 @@ testem.log
 # System Files
 .DS_Store
 Thumbs.db
+
+/build/
+/benchpress-build/
+gen_docs.disable
+test.disable
+regression/temp*.html
+performance/temp*.html
+.idea/workspace.xml
+*~
+*.swp
+angular.js.tmproj
+bower_components/
+angular.xcodeproj
+.idea
+*.iml
+.agignore
+.lvimrc
+libpeerconnection.log
+npm-debug.log
+/tmp/
+/scripts/bower/bower-*
+.vscode
+*.log
+*.stackdump
