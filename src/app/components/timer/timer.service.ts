@@ -24,4 +24,7 @@ export class TimerService {
 	stopTimer(timer) {
 		timer.stop();
 	}
+	timeLeft(timer) {
+		return timer.getCurrentTime();
+	}
 }

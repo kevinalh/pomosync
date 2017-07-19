@@ -61,4 +61,7 @@ export class TimerComponent implements OnInit {
 			this.sessionService.registerPomo(current, this.pomoSession);
 		}
 	}
+	getTimeLeft() {
+		return this.timerService.timeLeft(this.timer);
+	}
 }

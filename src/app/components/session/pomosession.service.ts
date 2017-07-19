@@ -6,7 +6,6 @@ import { Pomo } from '../../shared/pomo.model'
 import { Duration } from 'moment';
 
 import * as shortid from 'shortid';
-import Timr from 'timrjs';
 import * as moment from 'moment';
 
 @Injectable()
