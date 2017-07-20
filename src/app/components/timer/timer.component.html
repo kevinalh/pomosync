@@ -1,3 +1,18 @@
 <div>
-Time Left: {{ getTimeLeft() }}
+<ol>
+	<li *ngFor="let x of durationOptions" (click)="selectDuration(x)">
+		{{ parseDuration(x, 'mm') }}
+	</li>
+</ol>
+</div>
+<div>
+Time Left: {{ parseDuration(getTimeLeft()) }}
+</div>
+<button (click)='startPomo()'> Start </button>
+<div>
+	<ol>
+		<li *ngFor="let x of pomoSession.pomos">
+			{{ x.print() }}
+		</li>
+	</ol>
 </div>

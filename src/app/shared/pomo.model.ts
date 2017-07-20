@@ -12,4 +12,7 @@ export class Pomo {
 	validate(): boolean {
 		return true;
 	}
+	print(mode?: string): string {
+		return this.start.format(mode) + ' ' + this.end.format(mode);
+	}
 }

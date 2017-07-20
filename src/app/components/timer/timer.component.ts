@@ -15,11 +15,13 @@ import { PomoSession } from '../../shared/pomosession.model';
 	providers: [TimerService, PomoSessionService]
 })
 export class TimerComponent implements OnInit {
-	state: string;
+	state: String;
+	duration: Duration;
 	start: Moment;
 	end: Moment;
 	timer: any;
 	pomoSession: PomoSession;
+	durationOptions: Duration[];
 	constructor(private timerService: TimerService,
 		private sessionService: PomoSessionService) {}
 	ngOnInit() {
@@ -27,6 +29,11 @@ export class TimerComponent implements OnInit {
 		this.end = moment();
 		this.state = 'stopped';
 		this.timer = undefined;
+		this.duration = moment.duration(25, 'minutes');
+		this.durationOptions = [moment.duration(20, 'minutes'),
+			moment.duration(25, 'minutes'), moment.duration(30, 'minutes'),
+			moment.duration(35, 'minutes'), moment.duration(40, 'minutes')];
+		this.pomoSession = this.sessionService.createPomoSession();
 	}
 	createPomo(): Pomo {
 		let newPomo = new Pomo(this.start, this.end);
@@ -36,8 +43,8 @@ export class TimerComponent implements OnInit {
 			return undefined;
 		}
 	}
-	startPomo(duration: Duration) {
-		this.timer = this.timerService.startTimer(duration);
+	startPomo() {
+		this.timer = this.timerService.startTimer(this.duration);
 		this.state = 'running';
 	}
 	pausePomo() {
@@ -61,7 +68,16 @@ export class TimerComponent implements OnInit {
 			this.sessionService.registerPomo(current, this.pomoSession);
 		}
 	}
-	getTimeLeft() {
-		return this.timerService.timeLeft(this.timer);
+	getTimeLeft(): Duration {
+		if(this.state === 'stopped') {
+			return this.duration;
+		}
+		else return this.timerService.timeLeft(this.timer);
+	}
+	selectDuration(duration: Duration) {
+		this.duration = duration;
+	}
+	parseDuration(duration: Duration, mode = 'mm:ss') {
+		return moment.utc(duration.asMilliseconds()).format(mode);
 	}
 }
