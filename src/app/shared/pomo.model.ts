@@ -13,6 +13,6 @@ export class Pomo {
 		return true;
 	}
 	print(mode?: string): string {
-		return this.start.format(mode) + ' ' + this.end.format(mode);
+		return this.start.format(mode) + ' - ' + this.end.format(mode);
 	}
 }

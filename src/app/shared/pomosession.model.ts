@@ -3,35 +3,43 @@ import { Pomo } from './pomo.model';
 import * as shortid from 'shortid';
 
 export class PomoSession {
-	pomos: Pomo[];
-	id: string;
-	constructor(id?: string) {
-		if(id) this.id = id;
-	}
-	getSessionId(): string {
-		if(this.id) {
-			return this.id;
+	private _pomos: Pomo[];
+	private _id: string;
+	constructor(initId?: string) {
+		if (initId) {
+			this._id = initId;
 		}
-		console.error("Session id not yet defined");
+		if (!this._pomos) {
+			this._pomos = [];
+		}
+	}
+	get id(): string {
+		if (this._id) {
+			return this._id;
+		}
+		console.error('Session id not yet defined');
 		return undefined;
+	}
+	get pomos(): Pomo[] {
+		return this._pomos;
 	}
 	generateSessionId(): string {
 		try {
-			if(this.id) {
-				throw Error("Session id already exists.");
+			if (this._id) {
+				throw Error('Session id already exists.');
 			} else {
-				this.id = shortid.generate();
+				this._id = shortid.generate();
 			}
-		} catch(e) {
+		} catch (e) {
 			console.error(e.message);
 		}
 		return this.id;
 	}
 	registerPomo(pomo: Pomo): number {
-		if(pomo.validate()) {
-			return this.pomos.push(pomo);
+		if (pomo.validate()) {
+			return this._pomos.push(pomo);
 		}
-		console.warn("Current pomo is invalid.");
-		return this.pomos.length;
+		console.warn('Current pomo is invalid.');
+		return this._pomos.length;
 	}
 }

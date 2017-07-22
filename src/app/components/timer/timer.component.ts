@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter } from '@angular/core';
+import { Title } from '@angular/platform-browser';
 
 import { Moment, Duration } from 'moment';
 import * as moment from 'moment';
@@ -6,78 +7,94 @@ import * as moment from 'moment';
 import { TimerService } from './timer.service';
 import { PomoSessionService } from '../session/pomosession.service';
 
-import { Pomo } from '../../shared/pomo.model'
+import { Pomo } from '../../shared/pomo.model';
 import { PomoSession } from '../../shared/pomosession.model';
 
+/**
+ * Component that displays the timer.
+ *
+ * @export
+ * @class TimerComponent
+ * @implements {OnInit}
+ */
 @Component({
-	selector: 'timer',
+	selector: 'app-timer',
 	templateUrl: './timer.component.html',
 	providers: [TimerService, PomoSessionService]
 })
 export class TimerComponent implements OnInit {
-	state: String;
 	duration: Duration;
-	start: Moment;
-	end: Moment;
-	timer: any;
 	pomoSession: PomoSession;
 	durationOptions: Duration[];
+	@Output() titleAdd = new EventEmitter<string>();
 	constructor(private timerService: TimerService,
 		private sessionService: PomoSessionService) {}
-	ngOnInit() {
-		this.start = moment();
-		this.end = moment();
-		this.state = 'stopped';
-		this.timer = undefined;
+	ngOnInit(): void {
 		this.duration = moment.duration(25, 'minutes');
 		this.durationOptions = [moment.duration(20, 'minutes'),
 			moment.duration(25, 'minutes'), moment.duration(30, 'minutes'),
 			moment.duration(35, 'minutes'), moment.duration(40, 'minutes')];
 		this.pomoSession = this.sessionService.createPomoSession();
 	}
-	createPomo(): Pomo {
-		let newPomo = new Pomo(this.start, this.end);
-		if(newPomo.validate()) {
-			return newPomo;
-		} else {
-			return undefined;
-		}
+	startPomo(): void {
+		this.timerService.startTimer(this.duration);
 	}
-	startPomo() {
-		this.timer = this.timerService.startTimer(this.duration);
-		this.state = 'running';
+	pausePomo(): void {
+		this.timerService.pauseTimer();
 	}
-	pausePomo() {
-		if(this.state === 'running') {
-			this.timerService.pauseTimer(this.timer);
-			this.state = 'paused';
-		}
+	resumePomo(): void {
+		this.timerService.resumeTimer();
 	}
-	resumePomo() {
-		if(this.state === 'paused') {
-			this.timerService.resumeTimer(this.timer);
-			this.state = 'running';
-		}
-	}
-	stopPomo() {
-		if(this.state === 'paused' || 'running') {
-			this.timerService.stopTimer(this.timer);
-			this.state = 'stopped';
-			this.end = moment();
-			let current: Pomo = this.createPomo();
+	stopPomo(): void {
+		if (this.timerService.state === 'paused' || 'running') {
+			this.timerService.stopTimer();
+			const current: Pomo = this.sessionService.createPomo(this.timerService.start, this.timerService.end);
 			this.sessionService.registerPomo(current, this.pomoSession);
+			this.titleAdd.emit('');
 		}
 	}
+	switchPomo(): void {
+		const current = this.timerService.state;
+		if (current === 'stopped') {
+			this.startPomo();
+		} else if (current === 'running') {
+			this.stopPomo();
+		}
+	}
+	/**
+	 * Returns the time left in the current timer.
+	 * Also sets the title.
+	 *
+	 * @returns {Duration}
+	 * @memberof TimerComponent
+	 */
 	getTimeLeft(): Duration {
-		if(this.state === 'stopped') {
+		if (this.timerService.state === 'stopped') {
 			return this.duration;
 		}
-		else return this.timerService.timeLeft(this.timer);
+		const timeLeft = this.timerService.timeLeft();
+		this.titleAdd.emit(this.parseDuration(timeLeft, 'mm:ss'));
+		return timeLeft;
 	}
-	selectDuration(duration: Duration) {
+	selectDuration(duration: Duration): void {
 		this.duration = duration;
 	}
-	parseDuration(duration: Duration, mode = 'mm:ss') {
+	/**
+	 * Parses a Duration object using certain format.
+	 *
+	 * @param {Duration} duration
+	 * @param {string} [mode='mm:ss'] - Format used for parsing.
+	 * @returns {string}
+	 * @memberof TimerComponent
+	 */
+	parseDuration(duration: Duration, mode = 'mm:ss'): string {
 		return moment.utc(duration.asMilliseconds()).format(mode);
+	}
+	buttonText(): string {
+		if (this.timerService.state === 'running') {
+			return 'Stop';
+		} else {
+			return 'Start';
+		}
 	}
 }

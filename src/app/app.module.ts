@@ -1,4 +1,4 @@
-import { BrowserModule } from '@angular/platform-browser';
+import { BrowserModule, Title } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 
 import { AppComponent } from './app.component';
@@ -12,7 +12,7 @@ import { TimerComponent } from './components/timer/timer.component';
 	imports: [
 		BrowserModule
 	],
-	providers: [],
+	providers: [Title],
 	bootstrap: [AppComponent]
 })
 export class AppModule { }

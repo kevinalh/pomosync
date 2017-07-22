@@ -1,6 +1,6 @@
 <div>
-<ol>
-	<li *ngFor="let x of durationOptions" (click)="selectDuration(x)">
+<ol id="list--durations">
+	<li *ngFor="let x of durationOptions" (click)="selectDuration(x)" class="duration">
 		{{ parseDuration(x, 'mm') }}
 	</li>
 </ol>
@@ -8,11 +8,13 @@
 <div>
 Time Left: {{ parseDuration(getTimeLeft()) }}
 </div>
-<button (click)='startPomo()'> Start </button>
+<button (click)="switchPomo()">
+	{{ buttonText() }}
+</button>
 <div>
 	<ol>
 		<li *ngFor="let x of pomoSession.pomos">
-			{{ x.print() }}
+			{{ x.print('DD/MM/YYYY hh:mm:ss') }}
 		</li>
 	</ol>
 </div>
