@@ -1,0 +1,58 @@
+@import 'app.component';
+
+$font-timer: 'Ubuntu', Helvetica, sans-serif;
+
+ol {
+	font-family: $font-text;
+}
+
+#timer {
+	font-family: $font-timer;
+	font-size: 7rem;
+	padding: 1rem 1rem 0.5rem 1rem;
+	text-align: center;
+}
+
+#switcher-container {
+	text-align: center;
+	.switcher {
+		font-size: 1.2rem;
+		border: 0.5px solid black;
+		border-radius: 0.5rem;
+		padding: 1rem 1rem 1rem 1rem;
+		width: 8%;
+		min-width: 4.5rem;
+		text-align: center;
+		&:hover {
+			background-color: hsla(199, 5%, 85%, 1);
+		}
+		&:active {
+			box-shadow: inset 2px 2px 1px black,
+            inset 2px 3px 5px rgba(0,0,0,0.3),
+            inset -2px -3px 5px rgba(255,255,255,0.5);
+		}
+	}
+}
+
+.completed-pomos {
+	font-family: $font-text;
+	table-layout: fixed;
+	border-radius: 1rem;
+	border-collapse: collapse;
+	.registered-pomo {
+		border: 1px solid blue;
+		padding: 1rem;
+	}
+}
+
+.select-container {
+	text-align: center;
+}
+
+select {
+	text-align: center;
+	width: 15%;
+	min-width: 5rem;
+	max-width: 8rem;
+	font-size: 1.2rem;
+}

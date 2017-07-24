@@ -20,6 +20,7 @@ import { PomoSession } from '../../shared/pomosession.model';
 @Component({
 	selector: 'app-timer',
 	templateUrl: './timer.component.html',
+	styleUrls: ['../../../assets/scss/timer.component.scss'],
 	providers: [TimerService, PomoSessionService]
 })
 export class TimerComponent implements OnInit {
@@ -30,10 +31,11 @@ export class TimerComponent implements OnInit {
 	constructor(private timerService: TimerService,
 		private sessionService: PomoSessionService) {}
 	ngOnInit(): void {
-		this.duration = moment.duration(25, 'minutes');
-		this.durationOptions = [moment.duration(20, 'minutes'),
-			moment.duration(25, 'minutes'), moment.duration(30, 'minutes'),
-			moment.duration(35, 'minutes'), moment.duration(40, 'minutes')];
+		this.durationOptions = [moment.duration(5, 'minutes'),
+			moment.duration(10, 'minutes'), moment.duration(15, 'minutes'),
+			moment.duration(20, 'minutes'), moment.duration(25, 'minutes'),
+			moment.duration(30, 'minutes')];
+		this.duration = this.durationOptions[4];
 		this.pomoSession = this.sessionService.createPomoSession();
 	}
 	startPomo(): void {
@@ -96,5 +98,8 @@ export class TimerComponent implements OnInit {
 		} else {
 			return 'Start';
 		}
+	}
+	getState(): string {
+		return this.timerService.state;
 	}
 }

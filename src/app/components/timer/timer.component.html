@@ -1,20 +1,22 @@
-<div>
-<ol id="list--durations">
-	<li *ngFor="let x of durationOptions" (click)="selectDuration(x)" class="duration">
-		{{ parseDuration(x, 'mm') }}
-	</li>
-</ol>
+<div class="select-container">
+	<select [(ngModel)]="duration">
+		<option *ngFor="let d of durationOptions" [ngValue]="d">
+			{{ parseDuration(d, 'mm') }} m
+		</option>
+	</select>
 </div>
-<div>
-Time Left: {{ parseDuration(getTimeLeft()) }}
+
+<div id="timer">
+{{ parseDuration(getTimeLeft()) }}
 </div>
-<button (click)="switchPomo()">
-	{{ buttonText() }}
-</button>
-<div>
-	<ol>
-		<li *ngFor="let x of pomoSession.pomos">
-			{{ x.print('DD/MM/YYYY hh:mm:ss') }}
-		</li>
-	</ol>
+<div id="switcher-container">
+	<button type="button" (click)="switchPomo()" class="switcher" [ngClass]="getState()">
+		{{ buttonText() }}
+	</button>
 </div>
+<table class="completed-pomos">
+	<tr *ngFor="let x of pomoSession.pomos">
+		<td class="registered-pomo"> {{ x.print('DD/MM/YYYY') }} </td>
+		<td class="registered-pomo"> {{ x.print('hh:mm:ss') }} </td>
+	</tr>
+</table>

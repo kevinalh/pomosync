@@ -1,0 +1,12 @@
+$font-title: 'Satisfy', cursive;
+$font-text: 'Lato', Helvetica, sans-serif;
+
+html {
+	font-family: $font-text;
+}
+
+h1 {
+	font-family: $font-title;
+	font-size: 3rem;
+	color: hsla(300, 34%, 43%, 0.96);
+}
